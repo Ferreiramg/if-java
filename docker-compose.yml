@@ -1,0 +1,12 @@
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: lpdev
+      MYSQL_DATABASE: projeto_java
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../myslq/:/var/lib/mysql
