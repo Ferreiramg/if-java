@@ -1,6 +1,7 @@
 package com.lpdeveloper.projeto.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     @Autowired
     CorsHeadersFilter corsHeadersFilter;
 
+    @Value("${springdoc.api-docs.path}")
+    private String apiPath;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
@@ -35,14 +39,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.POST, "/login")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/", "/static/**", "/favicon.ico", "/manifest.json")
+                .antMatchers(HttpMethod.GET, "/", "/openapi/**", "/swagger-ui/**", apiPath + "/**", "/static/**",
+                        "/favicon.ico",
+                        "//api.json",
+                        "/manifest.json")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
-                .anyRequest().authenticated()
+               .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(corsHeadersFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtFilter, CorsHeadersFilter.class)
-                // .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .and()
                 .build();

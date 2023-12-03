@@ -34,13 +34,29 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
+    @Column(nullable = true)
+    private String role;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(role));
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -91,7 +107,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password =password;
+        this.password = password;
     }
 
     public String getEmail() {

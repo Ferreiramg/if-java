@@ -1,18 +1,20 @@
 package com.lpdeveloper.projeto.demo.models;
 
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
+
 @Entity
+@Table(name = "solicitacoes")
 public class Solicitacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private BigDecimal value;
+    private Double value;
 
     @Column(nullable = false)
     private Integer amount;
@@ -33,9 +35,19 @@ public class Solicitacao {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "emprestimo_id", nullable = true)
-    private Emprestimo emprestimo;
+
+    @OneToMany(mappedBy = "solicitacao", cascade = CascadeType.ALL)
+    private List<Emprestimo> emprestimos;
+
+    // ... (other methods)
+
+    public void setEmprestimos(List<Emprestimo> emprestimos) {
+        this.emprestimos = emprestimos;
+    }
+
+    public List<Emprestimo> getEmprestimos() {
+        return emprestimos;
+    }
 
     @PrePersist
     protected void onCreate() {
@@ -50,11 +62,11 @@ public class Solicitacao {
         this.id = id;
     }
 
-    public BigDecimal getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(BigDecimal value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -96,14 +108,6 @@ public class Solicitacao {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Emprestimo getEmprestimo() {
-        return emprestimo;
-    }
-
-    public void setEmprestimo(Emprestimo emprestimo) {
-        this.emprestimo = emprestimo;
     }
 
 }

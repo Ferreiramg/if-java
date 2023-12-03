@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: lpdev
-      MYSQL_DATABASE: projeto_java
+      MYSQL_DATABASE: emprestimos
     ports:
       - "3306:3306"
     volumes:

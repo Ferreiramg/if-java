@@ -14,7 +14,7 @@
 - [x] Login JWT
 - [x] Solicitação de Emprestimos
 - [x] Simulação de Emprestimos
-- [ ] Administração de SOlicitações
+- [x] Administração de Solicitações
 
 ### Pré-requisitos
 

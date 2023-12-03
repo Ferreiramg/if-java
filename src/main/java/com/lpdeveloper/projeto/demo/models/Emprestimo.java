@@ -1,6 +1,7 @@
 package com.lpdeveloper.projeto.demo.models;
 
 import javax.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -11,7 +12,10 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
+
+    @Column(name = "contract", nullable = false, length = 255)
     private String contract;
 
     @Column(name = "created_at", nullable = false)
@@ -19,21 +23,33 @@ public class Emprestimo {
     private Date createdAt;
 
     @Column(name = "start_at", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startAt;
 
-    @Column(nullable = false)
-    private Integer amount;
-
-    @Column(nullable = false)
-    private Double value;
-
-    @Column(nullable = false)
+    @Column(name = "tax", nullable = false)
     private Double tax;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "value", nullable = false)
+    private Double value;
+
+    @ManyToOne
+    @JoinColumn(name = "solicitacao_id", nullable = false)
+    private Solicitacao solicitacao;
+
+    // ... (other methods)
+
+    public Solicitacao getSolicitacao() {
+        return solicitacao;
+    }
+
+    public void setSolicitacao(Solicitacao solicitacao) {
+        this.solicitacao = solicitacao;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
 
     public Long getId() {
         return id;
@@ -41,6 +57,14 @@ public class Emprestimo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     public String getContract() {
@@ -67,22 +91,6 @@ public class Emprestimo {
         this.startAt = startAt;
     }
 
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
     public Double getTax() {
         return tax;
     }
@@ -91,12 +99,12 @@ public class Emprestimo {
         this.tax = tax;
     }
 
-    public User getUser() {
-        return user;
+    public Double getValue() {
+        return value;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setValue(Double value) {
+        this.value = value;
     }
 
 }
